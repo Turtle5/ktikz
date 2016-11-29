@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>TemplateWidget</class>
  <widget class="QWidget" name="TemplateWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>237</width>
+    <height>39</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Choose Template</string>
   </property>
@@ -59,8 +67,9 @@
   <customwidget>
    <class>ComboBox</class>
    <extends>QComboBox</extends>
-   <header>../common/utils/combobox.h</header>
+   <header>common/utils/combobox.h</header>
   </customwidget>
  </customwidgets>
+ <resources/>
  <connections/>
 </ui>
