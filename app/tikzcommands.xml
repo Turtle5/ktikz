@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE tikzcommands>
+<!--<!DOCTYPE tikzcommands>-->
 <!--
 name: human readable name used in the menu or dock widget
 description: is shown in the completion popup and in the statusbar (and is also used for the completion)
@@ -13,7 +13,11 @@ type: the highlighting color/font/style depends on the type
 This file should only contain the commands and options defined in Part III "TikZ ist kein Zeichenprogramm" in the PGF Manual.
 For ease of maintenance of this file, the structure of Part III of the manual is closely followed here.
 -->
-<tikzcommands title="&amp;Insert">
+<tikzcommands
+    xmlns="http://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="tikzcommands.xsd"
+    title="&amp;Insert">
 	<!-- 12 -->
 	<section title="Pict&amp;ures, scopes and styles">
 		<!-- 12.2 -->

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:element name="separator">
+    <xs:complexType>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="name" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>human readable name used in the menu or dock widget</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="description" type="xs:string" use="optional">
+          <xs:annotation>
+              <xs:documentation>is shown in the completion popup and in the statusbar (and is also used for the completion)</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+          <xs:attribute name="insert" type="xs:string" use="optional">
+          <xs:annotation>
+              <xs:documentation>string which is inserted when selected in the menu or dock widget</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+          <xs:attribute name="type" type="xs:byte" use="optional">
+          <xs:annotation>
+              <xs:documentation>type: the highlighting color/font/style depends on the type
+              0: plain text (no highlighting)
+              1: command
+              2: draw to next point
+              3: option</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+          <xs:attribute name="dx" type="xs:byte" use="optional">
+          <xs:annotation>
+              <xs:documentation>where the text editing cursor is put after inserting the string, relative to the start of the inserted string
+</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+          <xs:attribute name="dy" type="xs:byte" use="optional">
+          <xs:annotation>
+              <xs:documentation>where the text editing cursor is put after inserting the string, relative to the start of the inserted string
+</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+          <xs:attribute name="highlight" type="xs:string" use="optional">
+          <xs:annotation>
+              <xs:documentation>human readable name used in the menu or dock widget</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="section">
+    <xs:complexType mixed="true">
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element ref="separator">
+          <xs:annotation>
+            <xs:documentation>A separator</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="item">
+          <xs:annotation>
+            <xs:documentation>An entry</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="section">
+          <xs:annotation>
+            <xs:documentation>Subsection</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:attribute name="title" type="xs:string" use="optional"/>
+      <xs:attribute name="name" type="xs:string" use="optional"/>
+      <xs:attribute name="description" type="xs:string" use="optional"/>
+      <xs:attribute name="insert" type="xs:string" use="optional"/>
+      <xs:attribute name="type" type="xs:byte" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tikzcommands">
+    <xs:annotation>
+      <xs:documentation>
+This file should only contain the commands and options defined in Part III "TikZ ist kein Zeichenprogramm" in the PGF Manual.
+For ease of maintenance of this file, the structure of Part III of the manual is closely followed here.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" ref="section">
+          <!--<xs:annotation>
+            <xs:documentation></xs:documentation>
+          </xs:annotation>-->
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="title" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
