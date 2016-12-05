@@ -35,13 +35,36 @@ class HighlightingRule;
 
 struct TikzCommand
 {
+	/// Type of TikzCommand.
+	/// This includes "special" UI types.
+	/// Special types assumes name == "".
+	enum TikzCommandType // : qint8
+	{
+		// 0: plain text
+		//   1: command
+		//   2: draw to next point
+		//   3: option
+		PlainText = 0,
+		Command = 1,
+		DrawToNextPoint = 2,
+		Option = 3,
+		/// A submenu.
+		/// @remarks this assumes that the i-th command with type == -1
+		/// corresponds with the i-th submenu (see getCommands())
+		Special_SubMenu = -1,
+		/// A separator
+		Special_Separator = -2
+	};
+	/// Check if value is acceptable and convert it to TikzCommandType
+	static TikzCommandType intToStandardCommandType(int value);
+
 	QString name;
 	QString description;
 	QString command;
 	QString highlightString;
 	int dx;
 	int dy;
-	int type;
+	TikzCommandType type;
 	int number;
 };
 

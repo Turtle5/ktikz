@@ -71,7 +71,7 @@ TikzCommandInserter::TikzCommandInserter(QWidget *parent)
 
 static TikzCommand newCommand(const QString &name,
         const QString &description, const QString &command,
-        const QString &highlightString, int dx, int dy, int type)
+		const QString &highlightString, int dx, int dy, TikzCommand::TikzCommandType type)
 {
 	// type:
 	//   0: plain text
@@ -160,7 +160,9 @@ static TikzCommandList getChildCommands(QXmlStreamReader *xml, QList<TikzCommand
 			if (type.isEmpty())
 				type = QLatin1Char('0');
 
-			TikzCommand tikzCommand = newCommand(name, description, insertion, highlightString, xmlAttributes.value(QLatin1String("dx")).toString().toInt(), xmlAttributes.value(QLatin1String("dy")).toString().toInt(), type.toInt());
+			TikzCommand tikzCommand = newCommand(name, description, insertion, highlightString, xmlAttributes.value(QLatin1String("dx")).toString().toInt(), xmlAttributes.value(QLatin1String("dy")).toString().toInt(),
+												 TikzCommand::intToStandardCommandType(type.toInt())
+												 );
 			tikzCommand.number = tikzCommandsList->size();
 			tikzCommandsList->append(tikzCommand);
 			commands << tikzCommand;
@@ -168,13 +170,13 @@ static TikzCommandList getChildCommands(QXmlStreamReader *xml, QList<TikzCommand
 		}
 		else if (xml->name() == QLatin1String("separator"))
 		{
-			commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, 0);
+			commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, TikzCommand::Special_Separator);
 			xml->skipCurrentElement(); // same as above
 		}
 		else if (xml->name() == QLatin1String("section"))
 		{
-			commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, -1); // the i-th command with type == -1 corresponds to the i-th submenu (assumed in getMenu())
-			commandList.children << getChildCommands(xml, tikzCommandsList);
+			commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, TikzCommand::Special_SubMenu); // the i-th command with type == -1 corresponds to the i-th submenu (assumed in getMenu())
+            commandList.children << getChildCommands(xml, tikzCommandsList);
 		}
 		else
 			xml->skipCurrentElement();
@@ -228,12 +230,12 @@ static TikzCommandList loadChildCommandsJson(QJsonObject sectionObject, QList<Ti
 				const int type = commandObject.value(QLatin1String("type")).toInt();
 				if (commandObject.contains(QLatin1String("commands")))
 				{
-					commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, -1); // the i-th command with type == -1 corresponds to the i-th submenu (assumed in getMenu())
+					commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, TikzCommand::Special_SubMenu); // the i-th command with type == -1 corresponds to the i-th submenu (assumed in getMenu())
 					commandList.children << loadChildCommandsJson(commandObject, tikzCommandsList);
 				}
 				else if (type == -1)
 				{
-					commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, 0);
+					commands << newCommand(QString(), QString(), QString(), QString(), 0, 0, TikzCommand::Special_Separator);
 				}
 				else
 				{
@@ -413,18 +415,22 @@ QMenu *TikzCommandInserter::getMenu(const TikzCommandList &commandList, QWidget 
 	for (int i = 0; i < numOfCommands; ++i)
 	{
 		const QString name = commandList.commands.at(i).name;
-		if (name.isEmpty()) // add separator or submenu
+		//if (name.isEmpty()) // add separator or submenu
+		//{
+		if (commandList.commands.at(i).type == TikzCommand::Special_Separator)
 		{
-			if (commandList.commands.at(i).type == 0)
-			{
-				menu->addSeparator();
-			}
-			else // type == -1, so add submenu; this assumes that the i-th command with type == -1 corresponds with the i-th submenu (see getCommands())
-			{
-				menu->addMenu(getMenu(commandList.children.at(whichSection), parent));
-				++whichSection;
-			}
+			Q_ASSERT(name.isEmpty());
+			menu->addSeparator();
 		}
+		else if  (commandList.commands.at(i).type == TikzCommand::Special_SubMenu)
+		// type == -1, so add submenu; this assumes that the i-th command with type == -1
+		// corresponds with the i-th submenu (see getCommands())
+		{
+			Q_ASSERT(name.isEmpty());
+			menu->addMenu(getMenu(commandList.children.at(whichSection), parent));
+			++whichSection;
+		}
+		// }
 		else // add command
 		{
 			QAction *action = menu->addAction(name);
@@ -810,4 +816,12 @@ void TikzCommandInserter::insertTag(const QString &tag, int dx, int dy)
 	// else we are only inserting a string with no placeholders and no positioning, so the cursor must come at the end of the string (this is done automatically by Qt)
 
 	m_mainEdit->setFocus();
+}
+
+
+TikzCommand::TikzCommandType TikzCommand::intToStandardCommandType(int value)
+{
+	Q_ASSERT(value >=0 && value <= 3 );
+
+	return static_cast<TikzCommandType>(value);
 }
