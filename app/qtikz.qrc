@@ -2,6 +2,9 @@
 <qresource>
 	<file>tikzcommands.xml</file>
 	<file>tikzcommands.json</file>
+        <!-- Other TikZ commands -->
+        <file>tikz.external.xml</file>
+        <!-- icons -->
 	<file>icons/qtikz-22.png</file>
 	<file>icons/qtikz-128.png</file>
 	<file>icons/document-edit.png</file>

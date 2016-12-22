@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<!DOCTYPE tikzcommands>-->
-<!--
-name: human readable name used in the menu or dock widget
-description: is shown in the completion popup and in the statusbar (and is also used for the completion)
-insert: string which is inserted when selected in the menu or dock widget
-dx, dy: where the text editing cursor is put after inserting the string, relative to the start of the inserted string
-type: the highlighting color/font/style depends on the type
- 0: plain text (no highlighting)
- 1: command
- 2: draw to next point
- 3: option
-This file should only contain the commands and options defined in Part III "TikZ ist kein Zeichenprogramm" in the PGF Manual.
+
+<tikzcommands title="&amp;Insert"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation='tikzcommands.xsd'>
+
+	<!--
+item:
+	name: human readable name used in the menu or dock widget
+	description: is shown in the completion popup and in the statusbar (and is also used for the completion)
+	insert: string which is inserted when selected in the menu or dock widget
+	dx, dy: where the text editing cursor is put after inserting the string, relative to the start of the inserted string
+	type: the highlighting color/font/style depends on the type
+	 0: plain text (no highlighting)
+	 1: command
+	 2: draw to next point
+	 3: option
+-->
+
+  <defineLibrary name="TikZ" website="https://sourceforge.net/projects/pgf">
+	<subLibUseCommand>usetikzlibrary</subLibUseCommand>
+  </defineLibrary>
+  <!-- <depend on="tikz"/> -->
+
+
+<!-- This file should only contain the commands and options defined in Part III "TikZ ist kein Zeichenprogramm" in the PGF Manual.
 For ease of maintenance of this file, the structure of Part III of the manual is closely followed here.
 -->
-<tikzcommands
-    xmlns="http://www.w3schools.com"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="tikzcommands.xsd"
-    title="&amp;Insert">
+
 	<!-- 12 -->
 	<section title="Pict&amp;ures, scopes and styles">
 		<!-- 12.2 -->

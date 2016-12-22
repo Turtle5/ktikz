@@ -69,11 +69,22 @@ SOURCES += \
 	$${PWD}/tikzeditorhighlighter.cpp \
 	$${PWD}/tikzeditorview.cpp \
 	$${PWD}/usercommandeditdialog.cpp \
-	$${PWD}/usercommandinserter.cpp
+	$${PWD}/usercommandinserter.cpp \
+	$$PWD/tikzcommandmanager.cpp \
+	$$PWD/tikzcommandreaders.cpp \
+	$$PWD/tikzlibrary.cpp \
+	$$PWD/tikzlibraryid.cpp \
+	$$PWD/main_registertypes.cpp \
+	$$PWD/tikzcommand.cpp
 HEADERS += $$headerFiles($$SOURCES)
+
 RESOURCES = $${PWD}/qtikz.qrc
 
 ### Output
 
 target.path = $${BIN_INSTALL_DIR}
 INSTALLS += target
+
+OTHER_FILES += \
+	$$PWD/tikzcommands.xsd \
+	$$PWD/tikz.external.xml

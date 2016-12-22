@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<tikzcommands title="&amp;Insert"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation='tikzcommands.xsd'>
+
+  <defineLibrary name="TikZ" subName="external">
+  </defineLibrary>
+  <depend on="tikz.external"/>
+  <section title="Externalization" >
+    <item name="Set next file name" insert="\\tikzsetnextfilename{&lt;filename&gt;}\n" type="1"></item>
+    <item name="Enable externalization" description="\\tikzexternalize" insert="\\tikzexternalize\n" type="1"></item>
+  </section>
+</tikzcommands>

@@ -244,22 +244,16 @@ MainWindow::~MainWindow()
 	delete m_tikzPreviewController;
 	m_tikzHighlighter->deleteLater();
 }
-
+/// @remarks TikzCommand display is delayed, @see MainWindow::tikzCommandFetched
 void MainWindow::init()
 {
 //QTime t = QTime::currentTime();
 	m_tikzEditorView->setPasteEnabled();
 
-	TikzCommandInserter::loadCommands();
-//qCritical() << "TikzCommandInserter::loadCommands()" << t.msecsTo(QTime::currentTime());
-	m_commandInserter->setEditor(m_tikzEditorView->editor());
-	if (m_insertAction)
-		m_insertAction->setMenu(m_commandInserter->getMenu());
-	else
-		m_commandInserter->showItemsInDockWidget();
-//qCritical() << "setMenu()" << t.msecsTo(QTime::currentTime());
-	m_tikzHighlighter->setHighlightingRules(m_commandInserter->getHighlightingRules());
-//qCritical() << "setHighlightingRules()" << t.msecsTo(QTime::currentTime());
+	connect(m_commandInserter, SIGNAL(tikzCommandFechted(TikzCommandManagerResult)), SLOT(tikzCommandFetched(TikzCommandManagerResult)));
+	m_commandInserter->loadCommands();
+	// The commands display is delayed
+
 //	m_tikzHighlighter->rehighlight(); // avoid that textEdit emits the signal contentsChanged() when it is still empty
 	connect(m_userCommandInserter, SIGNAL(insertTag(QString)), m_commandInserter, SLOT(insertTag(QString)));
 
@@ -358,7 +352,22 @@ bool MainWindow::save()
 		}
 		else
 			return saveUrl(m_currentUrl);
-	}
+    }
+}
+
+void MainWindow::tikzCommandFetched(const TikzCommandManagerResult &)
+{
+    //qCritical() << "TikzCommandInserter::loadCommands()" << t.msecsTo(QTime::currentTime());
+    m_commandInserter->setEditor(m_tikzEditorView->editor());
+    if (m_insertAction){
+        m_insertAction->setMenu(m_commandInserter->getMenu());
+        m_insertAction->setEnabled(true);
+    }
+    else
+        m_commandInserter->showItemsInDockWidget();
+    //qCritical() << "setMenu()" << t.msecsTo(QTime::currentTime());
+        m_tikzHighlighter->setHighlightingRules(m_commandInserter->getHighlightingRules());
+    //qCritical() << "setHighlightingRules()" << t.msecsTo(QTime::currentTime());
 }
 
 bool MainWindow::saveAs()
@@ -757,6 +766,7 @@ void MainWindow::createCommandInsertWidget()
 	{
 		// add commands action (menu will be added later in init())
 		m_insertAction = new Action(tr("&Insert"), this, QLatin1String("insert"));
+		m_insertAction->setEnabled(false);
 #ifndef KTIKZ_USE_KDE
 		menuBar()->insertAction(m_settingsMenu->menuAction(), m_insertAction);
 #endif
@@ -982,7 +992,7 @@ void MainWindow::loadUrl(const Url &url)
 	m_openRecentAction->addUrl(url);
 //qCritical() << "loadUrl" << t.msecsTo(QTime::currentTime());
 //	statusBar()->showMessage(tr("File loaded"), 2000); // this is slow
-//      statusBar()->showMessage(tr("File loaded using %1 codec").arg(QString( m_currentEncoding->name())), 2000);
+//	  statusBar()->showMessage(tr("File loaded using %1 codec").arg(QString( m_currentEncoding->name())), 2000);
 //qCritical() << "loadUrl" << t.msecsTo(QTime::currentTime());
 }
 

@@ -3,6 +3,8 @@
  *     <florian@hackenberger.at>                                           *
  *   Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012 by Glad Deschrijver  *
  *     <glad.deschrijver@gmail.com>                                        *
+ *   Copyright (C) 2016 by G. Prudhomme                                    *
+ *     <gprud@users.noreply.github.com>                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +40,7 @@
 #endif
 
 #include "ktikzapplication.h"
+#include "main_registertypes.h"
 
 // add copyright notice to the *.ts files; this string is not used anywhere else
 static struct { const char *source; const char *comment; } copyrightString = QT_TRANSLATE_NOOP3("__Copyright__",
@@ -128,6 +131,7 @@ static void createTranslator(QTranslator *translator, const QString &transName, 
 
 int main(int argc, char **argv)
 {
+    KTikzRegisterTypes();
 //QTime t = QTime::currentTime();
 	Q_UNUSED(copyrightString);
 

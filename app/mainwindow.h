@@ -39,6 +39,7 @@ class AssistantController;
 #include <QtCore/QPointer>
 #include "../common/mainwidget.h"
 
+
 class QAction;
 class QCloseEvent;
 class QDockWidget;
@@ -56,6 +57,7 @@ class TikzHighlighter;
 class TikzPreviewController;
 class Url;
 class UserCommandInserter;
+class TikzCommandManagerResult;
 
 /** Provides a tiny application for simple editing of TikZ graphics
  * @author Florian Hackenberger
@@ -100,6 +102,7 @@ public:
 public Q_SLOTS:
 	void loadUrl(const Url &url);
 	bool save();
+	void tikzCommandFetched(const TikzCommandManagerResult&);
 
 protected:
 #ifdef KTIKZ_USE_KDE
