@@ -41,6 +41,9 @@ TikzHighlighter::~TikzHighlighter()
 
 void TikzHighlighter::setHighlightingRules(const QVector<HighlightingRule> &highlightingRules)
 {
+	// reset the rules
+	m_highlightingRules.clear();
+
 	m_highlightingRules << highlightingRules;
 
 	// add highlighting for environments and comments
@@ -62,6 +65,9 @@ void TikzHighlighter::setHighlightingRules(const QVector<HighlightingRule> &high
 	rule.pattern = QRegExp(QLatin1String("%[^\n]*"));
 	rule.isRegExp = true;
 	m_highlightingRules.append(rule);
+
+	// apply the highlight to the whole document
+	this->rehighlight();
 
 //	m_formatList = getDefaultHighlightFormats();
 }
